@@ -1,8 +1,8 @@
 import React from 'react';
-import { ShoppingCart, Heart, Menu, Star } from 'lucide-react';
+import Hero from '../components/home/Hero';
 
-export default function FreshHarvests() {
+export default function Home() {
   return (
-    <div>Home</div>
+    <div> <Hero /> </div>
   );
 }

@@ -18,7 +18,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+    <header className="fixed top-0 left-0 w-full bg-white  z-50">
       <div className="flex items-center justify-between px-4 lg:px-12 py-3 bg-white">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">

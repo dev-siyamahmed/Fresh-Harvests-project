@@ -1,11 +1,22 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "../components/shared/Navbar";
+import Footer from "../components/shared/Footer";
+import { Questrial } from "next/font/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
+
+const questrial = Questrial({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-questrial",
+
+})
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -25,9 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${questrial.variable} antialiased`}
       >
+        <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

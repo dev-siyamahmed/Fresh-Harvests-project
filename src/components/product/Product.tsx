@@ -8,27 +8,26 @@ import { useGetProductsQuery } from '@/service/productApi';
 export default function Product() {
   const router = useRouter();
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [displayLimit, setDisplayLimit] = useState(8);
 
   const { data: productsData, isLoading, error } = useGetProductsQuery({
-    categoryId: selectedCategoryId === null ? undefined : selectedCategoryId,
-    limit: displayLimit,
+    categoryId: selectedCategoryId,
+  }, {
+    refetchOnMountOrArgChange: true,
   });
 
   const products = productsData?.data || [];
-  const hasMoreProducts = products.length >= displayLimit;
+  const filteredProducts = selectedCategoryId ? products.filter((p) => p.categoryId === selectedCategoryId) : products;
 
   const handleCategorySelect = (categoryId: string | null) => {
     setSelectedCategoryId(categoryId);
-    setDisplayLimit(8); // Reset to show first 8 products
   };
 
   const handleProductClick = (productId: string) => {
     router.push(`/product/${productId}`);
   };
-
   const handleSeeAllProducts = () => {
-    setDisplayLimit(prev => prev + 8);
+    console.log("all product fun ");
+
   };
 
   if (isLoading) {
@@ -130,67 +129,75 @@ export default function Product() {
 
           <Category selectedCategoryId={selectedCategoryId} onCategorySelect={handleCategorySelect} />
 
+
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {products?.slice(0, 8)?.map((product) => (
-              <div key={product.id} className="cursor-pointer">
-                <div
-                  className="
-          bg-white rounded-2xl relative p-2 lg:p-3 shadow-md transition-all duration-300 transform 
-          w-full h-[212px] sm:h-[260px] lg:w-[282px] lg:h-[380px] 
-          hover:shadow-lg hover:-translate-y-1
-        "
-                  onClick={() => handleProductClick(product.id)}
-                >
-                  {/* Image */}
+            {filteredProducts && filteredProducts.length > 0 ? (
+              filteredProducts.slice(0, 8).map((product) => (
+                <div key={product.id} className="cursor-pointer">
                   <div
                     className="
-            w-full h-[120px] sm:h-[160px] lg:h-[208px] 
-            bg-[#F4F6F6] rounded-lg flex items-center justify-center overflow-hidden
+            bg-white rounded-2xl relative p-2 lg:p-3 shadow-md transition-all duration-300 transform 
+            w-full h-[212px] sm:h-[260px] lg:w-[282px] lg:h-[380px] 
+            hover:shadow-lg hover:-translate-y-1
+            group
           "
+                    onClick={() => handleProductClick(product.id)}
                   >
-                    {product.images && product.images.length > 0 ? (
-                      <Image
-                        src={product.images[0]}
-                        alt={product.productName}
-                        width={258}
-                        height={208}
-                        className="object-cover w-full h-full rounded-lg"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-200"></div>
-                    )}
-                  </div>
-
-                  {/* Product Name & Price & Button */}
-                  <div className="mt-2  items-center text-center">
-                    <h3 className="font-medium text-[#212337] text-[12px]  lg:text-[18px] truncate">
-                      {product.productName}
-                    </h3>
-                    <p className="text-[#4A4A52] font-normal text-[12px]  lg:text-[18px]">
-                      {product.price.toFixed(2)}
-                    </p>
-                    <button
+                    {/* Image */}
+                    <div
                       className="
-              w-full py-1 sm:py-2 lg:mt-6 m-1 lg:py-3 text-[#212337] rounded-[6px] sm:rounded-[6px] lg:rounded-[8px] 
-              text-[12px]  lg:text-[18px] font-normal bg-white border border-[#D9D9D9] 
-              transition-colors duration-200 hover:text-white hover:bg-[#FF6A1A]
+              w-full h-[120px] sm:h-[160px] lg:h-[208px] 
+              bg-[#F4F6F6] rounded-lg flex items-center justify-center overflow-hidden
             "
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleProductClick(product.id);
-                      }}
                     >
-                      Add to cart
-                    </button>
+                      {product.images && product.images.length > 0 ? (
+                        <Image
+                          src={product.images[0]}
+                          alt={product.productName}
+                          width={258}
+                          height={208}
+                          className="object-cover w-full h-full rounded-lg"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-200"></div>
+                      )}
+                    </div>
+
+                    {/* Product Name & Price & Button */}
+                    <div className="mt-2 items-center text-center">
+                      <h3 className="font-medium text-[#212337] text-[12px] lg:text-[18px] truncate">
+                        {product.productName}
+                      </h3>
+                      <p className="text-[#4A4A52] font-normal text-[12px] lg:text-[18px]">
+                        {product.price.toFixed(2)}
+                      </p>
+                      <button
+                        className="
+                w-full py-1 sm:py-2 lg:mt-6 my-1 lg:py-3 text-[#212337] rounded-[6px] sm:rounded-[6px] lg:rounded-[8px] 
+                text-[12px] lg:text-[18px] font-normal bg-white border border-[#D9D9D9] 
+                transition-colors duration-200
+                group-hover:bg-[#FF6A1A] group-hover:text-white
+              "
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleProductClick(product.id);
+                        }}
+                      >
+                        Add to cart
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-2 sm:col-span-2 lg:col-span-4 text-center py-10 text-gray-500 text-lg font-medium">
+                Product not found
               </div>
-            ))}
+            )}
           </div>
 
-
-
-          {hasMoreProducts && (
+          {/* See All Products Button */}
+          {filteredProducts && filteredProducts.length > 8 && (
             <div className="text-center py-6">
               <button
                 onClick={handleSeeAllProducts}
@@ -200,6 +207,8 @@ export default function Product() {
               </button>
             </div>
           )}
+
+
         </div>
       </div>
     </div>

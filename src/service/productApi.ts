@@ -27,7 +27,7 @@ export interface SingleProductResponse {
 }
 
 export interface ProductQueryParams {
-  categoryId?: string;
+  categoryId?: string | null;
   limit?: number;
   page?: number;
 }
@@ -40,12 +40,19 @@ export const productApi = createApi({
   tagTypes: ['Product'],
   endpoints: (builder) => ({
     getProducts: builder.query<ProductResponse, ProductQueryParams | void>({
+      // query: (params = {}) => {
+      //   const searchParams = new URLSearchParams();
+      //   if (params?.categoryId !== undefined && params?.categoryId !== null) searchParams.append('categoryId', params.categoryId);
+      //   const queryString = searchParams.toString();
+      //   return `${API_CONFIG.ENDPOINTS.PRODUCTS}${queryString ? `?${queryString}` : ''}`;
+      // },
+
       query: (params = {}) => {
-        const searchParams = new URLSearchParams();
-        if (params?.categoryId !== undefined) searchParams.append('categoryId', params.categoryId);
-        const queryString = searchParams.toString();
-        return `${API_CONFIG.ENDPOINTS.PRODUCTS}${queryString ? `?${queryString}` : ''}`;
-      },
+  const searchParams = new URLSearchParams();
+  if (params?.categoryId !== undefined && params?.categoryId !== null) searchParams.append('categoryId', params.categoryId);
+  const queryString = searchParams.toString();
+  return `${API_CONFIG.ENDPOINTS.PRODUCTS}${queryString ? `?${queryString}` : ''}`;
+},
       providesTags: ['Product'],
     }),
     getProductById: builder.query<SingleProductResponse, string>({

@@ -1,3 +1,4 @@
+"use client"
 import { useGetCategoriesQuery } from '@/service/categoryApi';
 import React from 'react';
 

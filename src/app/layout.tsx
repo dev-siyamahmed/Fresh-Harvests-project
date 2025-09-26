@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Rubik } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/shared/Navbar";
 import Footer from "../components/shared/Footer";
 import { Questrial } from "next/font/google";
+import { ReduxProvider } from "../redux/provider";
+import { Toaster } from "react-hot-toast";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,6 +19,13 @@ const questrial = Questrial({
   variable: "--font-questrial",
 
 })
+
+const rubik = Rubik({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-rubik",
+});
+
 
 
 const geistMono = Geist_Mono({
@@ -36,11 +46,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${questrial.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${questrial.variable} ${rubik.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <ReduxProvider>
+          {/* <ToastContainer> */}
+          <Navbar />
+          {children}
+          <Footer />
+          <Toaster />
+        </ReduxProvider>
       </body>
     </html>
   );

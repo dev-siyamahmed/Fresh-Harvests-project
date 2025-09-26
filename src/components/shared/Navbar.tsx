@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Heart, ShoppingCart } from "lucide-react";
+import { useAuthState } from "@/hooks/useAuthState";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,6 +16,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, openAuthModal, logout } = useAuthState();
   const pathname = usePathname();
 
   return (
@@ -66,12 +68,24 @@ export default function Navbar() {
             Cart
           </Link>
 
-          <Link
-            href="/signin"
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
-          >
-            Sign in
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-3">
+             
+              <button
+                onClick={logout}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={openAuthModal}
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            >
+              Sign in
+            </button>
+          )}
         </div>
 
         {/* Mobile Right Section */}
@@ -128,12 +142,36 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/signin"
+            href="/cart"
             onClick={() => setOpen(false)}
-            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            className="flex items-center gap-2"
           >
-            Sign in
+            <ShoppingCart size={18} /> Cart
           </Link>
+
+          {user ? (
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  logout();
+                  setOpen(false);
+                }}
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                openAuthModal();
+                setOpen(false);
+              }}
+              className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+            >
+              Sign in
+            </button>
+          )}
         </nav>
       </div>
 

@@ -9,6 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
+        rubik: ["var(--font-rubik)", "sans-serif"],
         questrial: ["var(--font-questrial)", "sans-serif"],
       },
       letterSpacing: {

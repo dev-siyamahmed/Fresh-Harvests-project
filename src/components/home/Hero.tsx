@@ -1,5 +1,8 @@
+"use client"
 import Image from 'next/image'
 import React from 'react'
+import AuthModal from '../ui/AuthModal'
+
 
 export default function Hero() {
   return (
@@ -113,6 +116,11 @@ export default function Hero() {
 
       {/* subtle texture bg */}
       <div className='pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-white via-white to-emerald-50' />
+
+
+      {/* Auth Modal */}
+      <AuthModal  />
+
     </section>
   )
 }

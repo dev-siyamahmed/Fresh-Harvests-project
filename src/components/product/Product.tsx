@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Category from '../category/Category';
 import { useRouter } from 'next/navigation';
 import { useGetProductsQuery } from '@/service/productApi';
+import Button from '../ui/Button';
 
 export default function Product() {
   const router = useRouter();
@@ -138,8 +139,7 @@ export default function Product() {
                     className="
             bg-white rounded-2xl relative p-2 lg:p-3 shadow-md transition-all duration-300 transform 
             w-full h-[212px] sm:h-[260px] lg:w-[282px] lg:h-[380px] 
-            hover:shadow-lg hover:-translate-y-1
-            group
+            hover:shadow-lg hover:-translate-y-1 group
           "
                     onClick={() => handleProductClick(product.id)}
                   >
@@ -171,7 +171,7 @@ export default function Product() {
                       <p className="text-[#4A4A52] font-normal text-[12px] lg:text-[18px]">
                         {product.price.toFixed(2)}
                       </p>
-                      <button
+                      {/* <button
                         className="
                 w-full py-1 sm:py-2 lg:mt-6 my-1 lg:py-3 text-[#212337] rounded-[6px] sm:rounded-[6px] lg:rounded-[8px] 
                 text-[12px] lg:text-[18px] font-normal bg-white border border-[#D9D9D9] 
@@ -184,7 +184,27 @@ export default function Product() {
                         }}
                       >
                         Add to cart
-                      </button>
+                      </button> */}
+
+                      {/* Mobile / Small device button */}
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="block lg:hidden my-1"
+                      >
+                        Add To Cart
+                      </Button>
+
+                      {/* Large device button */}
+                      <Button
+                        variant="secondary"
+                        size="lg"
+                        className="hidden lg:block lg:mt-6"
+                      >
+                        Add To Cart
+                      </Button>
+
+
                     </div>
                   </div>
                 </div>
@@ -198,13 +218,8 @@ export default function Product() {
 
           {/* See All Products Button */}
           {filteredProducts && filteredProducts.length > 8 && (
-            <div className="text-center py-6">
-              <button
-                onClick={handleSeeAllProducts}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg"
-              >
-                See All Products
-              </button>
+            <div className="text-center py-6" onClick={handleSeeAllProducts}>
+              <Button variant='outline'> See All Products</Button>
             </div>
           )}
 
